@@ -32,29 +32,29 @@ import kotlinx.android.synthetic.main.donut_list.*
 /**
  * Fragment containing the RecyclerView which shows the current list of donuts being tracked.
  */
-class DonutList : Fragment() {
+class ListFragment : Fragment() {
 
-    private lateinit var donutListViewModel: DonutListViewModel
+    private lateinit var listViewModel: ListViewModel
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
             findNavController().navigate(
-                DonutListDirections.actionDonutListToDonutEntryDialogFragment(donut.id)
+                ListFragmentDirections.actionListToEntry(donut.id)
             )
         },
         onDelete = { donut ->
             NotificationManagerCompat.from(requireContext()).cancel(donut.id.toInt())
-            donutListViewModel.delete(donut)
+            listViewModel.delete(donut)
         }
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DonutListBinding.bind(view)
         val donutDao = DonutDatabase.getDatabase(requireContext()).donutDao()
-        donutListViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
-            .get(DonutListViewModel::class.java)
+        listViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
+            .get(ListViewModel::class.java)
 
-        donutListViewModel.donuts.observe(viewLifecycleOwner) { donuts ->
+        listViewModel.donuts.observe(viewLifecycleOwner) { donuts ->
             adapter.submitList(donuts)
         }
 
@@ -62,7 +62,7 @@ class DonutList : Fragment() {
 
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(
-                DonutListDirections.actionDonutListToDonutEntryDialogFragment()
+                ListFragmentDirections.actionListToEntry()
             )
         }
     }

@@ -22,12 +22,12 @@ import com.android.samples.donuttracker.database.DonutDao
 class ViewModelFactory(private val donutDao: DonutDao) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DonutListViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(ListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return DonutListViewModel(donutDao) as T
-        } else if (modelClass.isAssignableFrom(DonutEntryViewModel::class.java)) {
+            return ListViewModel(donutDao) as T
+        } else if (modelClass.isAssignableFrom(EntryViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return DonutEntryViewModel(donutDao) as T
+            return EntryViewModel(donutDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

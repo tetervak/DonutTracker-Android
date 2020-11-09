@@ -24,7 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DonutEntryViewModel(private val donutDao: DonutDao) : ViewModel() {
+class EntryViewModel(private val donutDao: DonutDao) : ViewModel() {
 
     private var donutLiveData: LiveData<Donut>? = null
 

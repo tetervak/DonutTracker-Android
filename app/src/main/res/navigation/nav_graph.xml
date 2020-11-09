@@ -17,24 +17,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/donutList">
+    app:startDestination="@id/list_fragment">
 
     <fragment
-        android:id="@+id/donutList"
-        android:name="com.android.samples.donuttracker.DonutList"
-        android:label="DonutList" >
+        android:id="@+id/list_fragment"
+        android:name="com.android.samples.donuttracker.ListFragment"
+        android:label="ListFragment">
         <action
-            android:id="@+id/action_donutList_to_donutEntryDialogFragment"
-            app:destination="@id/donutEntryDialogFragment" />
+            android:id="@+id/action_list_to_entry"
+            app:destination="@id/entry_dialog" />
     </fragment>
     <dialog
-        android:id="@+id/donutEntryDialogFragment"
-        android:name="com.android.samples.donuttracker.DonutEntryDialogFragment"
-        android:label="DonutEntryDialogFragment">
+        android:id="@+id/entry_dialog"
+        android:name="com.android.samples.donuttracker.EntryDialog"
+        android:label="EntryDialog">
         <deepLink app:uri="myapp://navdonutcreator.com/donutcreator" />
         <argument
             android:name="itemId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
     </dialog>
 </navigation>
