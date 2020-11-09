@@ -1,10 +1,12 @@
-MAD Skills Navigation Sample (Donut Tracker)
+Based on MAD Skills Navigation Sample (Donut Tracker)
 ==============================================
 
 This sample shows the features of Navigation component highlighted by the Navigation
 episodes in the MAD Skills series of [videos](https://www.youtube.com/user/androiddevelopers) 
 and [articles](https://medium.com/androiddevelopers). Specifically, episodes
 2, 3, andd 4 walk through code from this sample.
+
+Please, notice that it is not the original code from Google, the code was edited.
 
 ### Features
 
