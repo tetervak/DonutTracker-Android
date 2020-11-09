@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.android.samples.donuttracker.database.DonutDao
+import com.android.samples.donuttracker.ui.entry.DonutEntryViewModel
+import com.android.samples.donuttracker.ui.list.DonutListViewModel
 
 class ViewModelFactory(private val donutDao: DonutDao) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ListViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(DonutListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ListViewModel(donutDao) as T
-        } else if (modelClass.isAssignableFrom(EntryViewModel::class.java)) {
+            return DonutListViewModel(donutDao) as T
+        } else if (modelClass.isAssignableFrom(DonutEntryViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return EntryViewModel(donutDao) as T
+            return DonutEntryViewModel(donutDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

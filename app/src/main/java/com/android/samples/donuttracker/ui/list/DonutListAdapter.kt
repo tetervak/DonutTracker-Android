@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.ui.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.android.samples.donuttracker.R
 import com.android.samples.donuttracker.databinding.DonutItemBinding
+import com.android.samples.donuttracker.database.DonutEntity
 
 /**
  * The adapter used by the RecyclerView to display the current list of donuts
  */
-class ListAdapter(private var onEdit: (DonutEntity) -> Unit, private var onDelete: (DonutEntity) -> Unit) :
-    ListAdapter<DonutEntity, com.android.samples.donuttracker.ListAdapter.ListViewHolder>(DonutDiffCallback()) {
+class DonutListAdapter(
+    private var onEdit: (DonutEntity) -> Unit,
+    private var onDelete: (DonutEntity) -> Unit) :
+    ListAdapter<DonutEntity, DonutListAdapter.ViewHolder>(DonutDiffCallback()) {
 
-    class ListViewHolder(
-            private val binding: DonutItemBinding,
-            private var onEdit: (DonutEntity) -> Unit,
-            private var onDelete: (DonutEntity) -> Unit
+    class ViewHolder(
+        private val binding: DonutItemBinding,
+        private var onEdit: (DonutEntity) -> Unit,
+        private var onDelete: (DonutEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         private var donutId: Long = -1
         private var nameView = binding.name
@@ -56,26 +60,28 @@ class ListAdapter(private var onEdit: (DonutEntity) -> Unit, private var onDelet
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        return ListViewHolder(
+        return ViewHolder(
             DonutItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onEdit,
             onDelete
         )
     }
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-}
 
-class DonutDiffCallback : DiffUtil.ItemCallback<DonutEntity>() {
-    override fun areItemsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
-        return oldItem.id == newItem.id
+    class DonutDiffCallback : DiffUtil.ItemCallback<DonutEntity>() {
+        override fun areItemsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
+            return oldItem == newItem
+        }
     }
 
-    override fun areContentsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
-        return oldItem == newItem
-    }
+
 }

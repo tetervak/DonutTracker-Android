@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.ui.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.android.samples.donuttracker.ui.ViewModelFactory
 import com.android.samples.donuttracker.databinding.DonutListBinding
 import com.android.samples.donuttracker.database.DonutDatabase
 import kotlinx.android.synthetic.main.donut_list.*
@@ -32,14 +33,14 @@ import kotlinx.android.synthetic.main.donut_list.*
 /**
  * Fragment containing the RecyclerView which shows the current list of donuts being tracked.
  */
-class ListFragment : Fragment() {
+class DonutListFragment : Fragment() {
 
-    private lateinit var listViewModel: ListViewModel
+    private lateinit var listViewModel: DonutListViewModel
 
-    private val adapter = ListAdapter(
+    private val adapter = DonutListAdapter(
         onEdit = { donut ->
             findNavController().navigate(
-                ListFragmentDirections.actionListToEntry(donut.id)
+                DonutListFragmentDirections.actionListToEntry(donut.id)
             )
         },
         onDelete = { donut ->
@@ -52,7 +53,7 @@ class ListFragment : Fragment() {
         val binding = DonutListBinding.bind(view)
         val donutDao = DonutDatabase.getDatabase(requireContext()).donutDao()
         listViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
-            .get(ListViewModel::class.java)
+            .get(DonutListViewModel::class.java)
 
         listViewModel.donuts.observe(viewLifecycleOwner) { donuts ->
             adapter.submitList(donuts)
@@ -62,7 +63,7 @@ class ListFragment : Fragment() {
 
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(
-                ListFragmentDirections.actionListToEntry()
+                DonutListFragmentDirections.actionListToEntry()
             )
         }
     }

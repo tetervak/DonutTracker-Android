@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.ui.entry
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.android.samples.donuttracker.database.DonutDao
+import com.android.samples.donuttracker.database.DonutEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EntryViewModel(private val donutDao: DonutDao) : ViewModel() {
+class DonutEntryViewModel(private val donutDao: DonutDao) : ViewModel() {
 
     private var donutLiveData: LiveData<DonutEntity>? = null
 

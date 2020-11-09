@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -22,7 +22,7 @@ import androidx.room.PrimaryKey
  * This class holds the data that we are tracking for each donut: its name, a description, and
  * a rating.
  */
-@Entity
+@Entity(tableName = "donuts")
 data class DonutEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,

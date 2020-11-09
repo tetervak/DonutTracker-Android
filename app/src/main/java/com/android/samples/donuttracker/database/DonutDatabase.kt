@@ -19,7 +19,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.android.samples.donuttracker.DonutEntity
 
 /**
  * The underlying database where information about the donuts is stored.

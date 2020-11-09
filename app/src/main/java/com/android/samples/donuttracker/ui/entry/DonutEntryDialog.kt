@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.samples.donuttracker
+package com.android.samples.donuttracker.ui.entry
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -24,17 +24,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.android.samples.donuttracker.Notifier
+import com.android.samples.donuttracker.R
+import com.android.samples.donuttracker.ui.ViewModelFactory
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
 import com.android.samples.donuttracker.database.DonutDatabase
+import com.android.samples.donuttracker.database.DonutEntity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
  * This dialog allows the user to enter information about a donut, either creating a new
  * entry or updating an existing one.
  */
-class EntryDialog : BottomSheetDialogFragment() {
+class DonutEntryDialog : BottomSheetDialogFragment() {
 
-    private lateinit var entryViewModel: EntryViewModel
+    private lateinit var entryViewModel: DonutEntryViewModel
 
     private enum class EditingState {
         NEW_DONUT,
@@ -46,12 +50,12 @@ class EntryDialog : BottomSheetDialogFragment() {
         val donutDao = DonutDatabase.getDatabase(requireContext()).donutDao()
 
         entryViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
-            .get(EntryViewModel::class.java)
+            .get(DonutEntryViewModel::class.java)
 
         val binding = DonutEntryDialogBinding.bind(view)
 
         var donut: DonutEntity? = null
-        val args: EntryDialogArgs by navArgs()
+        val args: DonutEntryDialogArgs by navArgs()
         val editingState =
             if (args.itemId > 0) EditingState.EXISTING_DONUT
             else EditingState.NEW_DONUT
@@ -82,7 +86,7 @@ class EntryDialog : BottomSheetDialogFragment() {
                 binding.description.text.toString(),
                 binding.ratingBar.rating.toInt()
             ) { actualId ->
-                val arg = EntryDialogArgs(actualId).toBundle()
+                val arg = DonutEntryDialogArgs(actualId).toBundle()
                 val pendingIntent = navController
                     .createDeepLink()
                     .setDestination(R.id.entry_dialog)
