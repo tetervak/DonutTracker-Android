@@ -36,7 +36,7 @@ class ListFragment : Fragment() {
 
     private lateinit var listViewModel: ListViewModel
 
-    private val adapter = DonutListAdapter(
+    private val adapter = ListAdapter(
         onEdit = { donut ->
             findNavController().navigate(
                 ListFragmentDirections.actionListToEntry(donut.id)

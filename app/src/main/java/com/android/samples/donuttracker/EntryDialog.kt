@@ -50,7 +50,7 @@ class EntryDialog : BottomSheetDialogFragment() {
 
         val binding = DonutEntryDialogBinding.bind(view)
 
-        var donut: Donut? = null
+        var donut: DonutEntity? = null
         val args: EntryDialogArgs by navArgs()
         val editingState =
             if (args.itemId > 0) EditingState.EXISTING_DONUT

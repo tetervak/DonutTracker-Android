@@ -19,12 +19,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.android.samples.donuttracker.Donut
+import com.android.samples.donuttracker.DonutEntity
 
 /**
  * The underlying database where information about the donuts is stored.
  */
-@Database(entities = [Donut::class], version = 1)
+@Database(entities = [DonutEntity::class], version = 1)
 abstract class DonutDatabase : RoomDatabase() {
 
     abstract fun donutDao(): DonutDao

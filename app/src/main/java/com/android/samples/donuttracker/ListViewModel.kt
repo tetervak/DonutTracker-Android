@@ -29,9 +29,9 @@ class ListViewModel(private val donutDao: DonutDao) : ViewModel() {
 
     // Users of this ViewModel will observe changes to its donuts list to know when
     // to redisplay those changes
-    val donuts: LiveData<List<Donut>> = donutDao.getAll()
+    val donuts: LiveData<List<DonutEntity>> = donutDao.getAll()
 
-    fun delete(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
+    fun delete(donut: DonutEntity) = viewModelScope.launch(Dispatchers.IO) {
         donutDao.delete(donut)
     }
 }

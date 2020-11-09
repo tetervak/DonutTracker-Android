@@ -26,9 +26,9 @@ import kotlinx.coroutines.launch
 
 class EntryViewModel(private val donutDao: DonutDao) : ViewModel() {
 
-    private var donutLiveData: LiveData<Donut>? = null
+    private var donutLiveData: LiveData<DonutEntity>? = null
 
-    fun get(id: Long): LiveData<Donut> {
+    fun get(id: Long): LiveData<DonutEntity> {
         return donutLiveData ?: liveData {
             emit(donutDao.get(id))
         }.also {
@@ -43,7 +43,7 @@ class EntryViewModel(private val donutDao: DonutDao) : ViewModel() {
         rating: Int,
         setupNotification: (Long) -> Unit
     ) {
-        val donut = Donut(id, name, description, rating)
+        val donut = DonutEntity(id, name, description, rating)
 
         CoroutineScope(Dispatchers.Main.immediate).launch {
             var actualId = id
@@ -58,11 +58,11 @@ class EntryViewModel(private val donutDao: DonutDao) : ViewModel() {
         }
     }
 
-    private suspend fun insert(donut: Donut): Long {
+    private suspend fun insert(donut: DonutEntity): Long {
         return donutDao.insert(donut)
     }
 
-    private fun update(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
+    private fun update(donut: DonutEntity) = viewModelScope.launch(Dispatchers.IO) {
         donutDao.update(donut)
     }
 }

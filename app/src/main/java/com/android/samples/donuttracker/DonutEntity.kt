@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey
  * a rating.
  */
 @Entity
-data class Donut(
+data class DonutEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
     val description: String = "",

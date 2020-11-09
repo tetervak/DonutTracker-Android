@@ -21,7 +21,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.android.samples.donuttracker.Donut
+import com.android.samples.donuttracker.DonutEntity
 
 /**
  * The Data Access Object used to retrieve and store data from/to the underlying database.
@@ -31,17 +31,17 @@ import com.android.samples.donuttracker.Donut
 @Dao
 interface DonutDao {
     @Query("SELECT * FROM donut")
-    fun getAll(): LiveData<List<Donut>>
+    fun getAll(): LiveData<List<DonutEntity>>
 
     @Query("SELECT * FROM donut WHERE id = :id")
-    suspend fun get(id: Long): Donut
+    suspend fun get(id: Long): DonutEntity
 
     @Insert
-    suspend fun insert(donut: Donut): Long
+    suspend fun insert(donut: DonutEntity): Long
 
     @Delete
-    suspend fun delete(donut: Donut)
+    suspend fun delete(donut: DonutEntity)
 
     @Update
-    suspend fun update(donut: Donut)
+    suspend fun update(donut: DonutEntity)
 }
