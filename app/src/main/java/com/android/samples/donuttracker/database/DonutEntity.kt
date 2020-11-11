@@ -15,6 +15,7 @@
  */
 package com.android.samples.donuttracker.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -24,8 +25,18 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "donuts")
 data class DonutEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+
+    @ColumnInfo(name = "name")
     val name: String,
+
+    @ColumnInfo(name = "description")
     val description: String = "",
-    val rating: Int
+
+    @ColumnInfo(name = "rating")
+    val rating: Int,
+
+    @ColumnInfo(name = "low_fat")
+    val lowFat: Boolean = false
 )
