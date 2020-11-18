@@ -15,23 +15,25 @@
  */
 package com.android.samples.donuttracker.ui.entry
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.android.samples.donuttracker.database.DonutDao
-import com.android.samples.donuttracker.database.DonutEntity
+import com.android.samples.donuttracker.domain.Donut
+import com.android.samples.donuttracker.repository.DonutRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DonutEntryViewModel(private val donutDao: DonutDao) : ViewModel() {
+class DonutEntryViewModel @ViewModelInject constructor(
+    private val repository: DonutRepository) : ViewModel() {
 
-    private var donutLiveData: LiveData<DonutEntity>? = null
+    private var donutLiveData: LiveData<Donut>? = null
 
-    fun get(id: Long): LiveData<DonutEntity> {
+    fun get(id: Long): LiveData<Donut> {
         return donutLiveData ?: liveData {
-            emit(donutDao.get(id))
+            emit(repository.get(id))
         }.also {
             donutLiveData = it
         }
@@ -44,7 +46,7 @@ class DonutEntryViewModel(private val donutDao: DonutDao) : ViewModel() {
         rating: Int,
         setupNotification: (Long) -> Unit
     ) {
-        val donut = DonutEntity(id, name, description, rating)
+        val donut = Donut(id, name, description, rating)
 
         CoroutineScope(Dispatchers.Main.immediate).launch {
             var actualId = id
@@ -59,11 +61,11 @@ class DonutEntryViewModel(private val donutDao: DonutDao) : ViewModel() {
         }
     }
 
-    private suspend fun insert(donut: DonutEntity): Long {
-        return donutDao.insert(donut)
+    private suspend fun insert(donut: Donut): Long {
+        return repository.insert(donut)
     }
 
-    private fun update(donut: DonutEntity) = viewModelScope.launch(Dispatchers.IO) {
-        donutDao.update(donut)
+    private fun update(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(donut)
     }
 }

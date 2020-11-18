@@ -31,7 +31,7 @@ abstract class DonutDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: DonutDatabase? = null
 
-        fun getDatabase(context: Context): DonutDatabase {
+        fun getInstance(context: Context): DonutDatabase {
             val tempInstance =
                 INSTANCE
             if (tempInstance != null) {

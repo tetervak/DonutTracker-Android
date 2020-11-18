@@ -20,25 +20,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.Notifier
 import com.android.samples.donuttracker.R
-import com.android.samples.donuttracker.ui.ViewModelFactory
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
-import com.android.samples.donuttracker.database.DonutDatabase
-import com.android.samples.donuttracker.database.DonutEntity
+import com.android.samples.donuttracker.domain.Donut
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * This dialog allows the user to enter information about a donut, either creating a new
  * entry or updating an existing one.
  */
+@AndroidEntryPoint
 class DonutEntryDialog : BottomSheetDialogFragment() {
 
-    private lateinit var entryViewModel: DonutEntryViewModel
+    private val entryViewModel: DonutEntryViewModel by viewModels()
 
     private enum class EditingState {
         NEW_DONUT,
@@ -47,14 +47,10 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val donutDao = DonutDatabase.getDatabase(requireContext()).donutDao()
-
-        entryViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
-            .get(DonutEntryViewModel::class.java)
 
         val binding = DonutEntryDialogBinding.bind(view)
 
-        var donut: DonutEntity? = null
+        var donut: Donut? = null
         val args: DonutEntryDialogArgs by navArgs()
         val editingState =
             if (args.itemId > 0) EditingState.EXISTING_DONUT

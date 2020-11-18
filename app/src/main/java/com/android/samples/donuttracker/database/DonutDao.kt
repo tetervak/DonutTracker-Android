@@ -41,6 +41,9 @@ interface DonutDao {
     @Delete
     suspend fun delete(donut: DonutEntity)
 
+    @Query("DELETE FROM donuts WHERE id=:id")
+    suspend fun delete(id: Long)
+
     @Update
     suspend fun update(donut: DonutEntity)
 }

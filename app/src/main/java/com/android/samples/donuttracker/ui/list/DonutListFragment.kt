@@ -21,21 +21,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.android.samples.donuttracker.ui.ViewModelFactory
 import com.android.samples.donuttracker.databinding.DonutListBinding
-import com.android.samples.donuttracker.database.DonutDatabase
-import kotlinx.android.synthetic.main.donut_list.*
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Fragment containing the RecyclerView which shows the current list of donuts being tracked.
  */
+@AndroidEntryPoint
 class DonutListFragment : Fragment() {
 
-    private lateinit var listViewModel: DonutListViewModel
+    private val listViewModel: DonutListViewModel by viewModels()
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
@@ -51,15 +50,12 @@ class DonutListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DonutListBinding.bind(view)
-        val donutDao = DonutDatabase.getDatabase(requireContext()).donutDao()
-        listViewModel = ViewModelProvider(this, ViewModelFactory(donutDao))
-            .get(DonutListViewModel::class.java)
 
         listViewModel.donuts.observe(viewLifecycleOwner) { donuts ->
             adapter.submitList(donuts)
         }
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(

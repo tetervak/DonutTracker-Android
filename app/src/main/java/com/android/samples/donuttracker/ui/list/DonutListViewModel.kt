@@ -15,24 +15,26 @@
  */
 package com.android.samples.donuttracker.ui.list
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.samples.donuttracker.database.DonutDao
-import com.android.samples.donuttracker.database.DonutEntity
+import com.android.samples.donuttracker.domain.Donut
+import com.android.samples.donuttracker.repository.DonutRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
  * This ViewModel is used to access the underlying data and to observe changes to it.
  */
-class DonutListViewModel(private val donutDao: DonutDao) : ViewModel() {
+class DonutListViewModel @ViewModelInject constructor(
+    private val repository: DonutRepository) : ViewModel() {
 
     // Users of this ViewModel will observe changes to its donuts list to know when
     // to redisplay those changes
-    val donuts: LiveData<List<DonutEntity>> = donutDao.getAll()
+    val donuts: LiveData<List<Donut>> = repository.getAll()
 
-    fun delete(donut: DonutEntity) = viewModelScope.launch(Dispatchers.IO) {
-        donutDao.delete(donut)
+    fun delete(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(donut)
     }
 }

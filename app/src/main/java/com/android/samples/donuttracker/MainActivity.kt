@@ -21,11 +21,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.android.samples.donuttracker.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Main activity class. Not much happens here, just some basic UI setup.
  * The main logic occurs in the fragments which populate this activity.
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

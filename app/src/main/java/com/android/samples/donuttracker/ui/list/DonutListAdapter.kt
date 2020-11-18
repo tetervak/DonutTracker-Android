@@ -22,29 +22,30 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.samples.donuttracker.R
 import com.android.samples.donuttracker.databinding.DonutItemBinding
-import com.android.samples.donuttracker.database.DonutEntity
+import com.android.samples.donuttracker.domain.Donut
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * The adapter used by the RecyclerView to display the current list of donuts
  */
 class DonutListAdapter(
-    private var onEdit: (DonutEntity) -> Unit,
-    private var onDelete: (DonutEntity) -> Unit) :
-    ListAdapter<DonutEntity, DonutListAdapter.ViewHolder>(DonutDiffCallback()) {
+    private var onEdit: (Donut) -> Unit,
+    private var onDelete: (Donut) -> Unit) :
+    ListAdapter<Donut, DonutListAdapter.ViewHolder>(DonutDiffCallback()) {
 
     class ViewHolder(
         private val binding: DonutItemBinding,
-        private var onEdit: (DonutEntity) -> Unit,
-        private var onDelete: (DonutEntity) -> Unit
+        private var onEdit: (Donut) -> Unit,
+        private var onDelete: (Donut) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         private var donutId: Long = -1
         private var nameView = binding.name
         private var description = binding.description
         private var thumbnail = binding.thumbnail
         private var rating = binding.rating
-        private var donut: DonutEntity? = null
+        private var donut: Donut? = null
 
-        fun bind(donut: DonutEntity) {
+        fun bind(donut: Donut) {
             donutId = donut.id
             nameView.text = donut.name
             description.text = donut.description
@@ -73,12 +74,12 @@ class DonutListAdapter(
         holder.bind(getItem(position))
     }
 
-    class DonutDiffCallback : DiffUtil.ItemCallback<DonutEntity>() {
-        override fun areItemsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
+    class DonutDiffCallback : DiffUtil.ItemCallback<Donut>() {
+        override fun areItemsTheSame(oldItem: Donut, newItem: Donut): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: DonutEntity, newItem: DonutEntity): Boolean {
+        override fun areContentsTheSame(oldItem: Donut, newItem: Donut): Boolean {
             return oldItem == newItem
         }
     }
