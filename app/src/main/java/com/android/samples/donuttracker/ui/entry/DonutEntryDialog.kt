@@ -15,7 +15,6 @@
  */
 package com.android.samples.donuttracker.ui.entry
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +23,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.android.samples.donuttracker.Notifier
-import com.android.samples.donuttracker.R
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
 import com.android.samples.donuttracker.domain.Donut
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -45,10 +42,12 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         EXISTING_DONUT
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        val binding = DonutEntryDialogBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = DonutEntryDialogBinding.inflate(inflater, container, false)
 
         var donut: Donut? = null
         val args: DonutEntryDialogArgs by navArgs()
@@ -81,16 +80,7 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
                 binding.name.text.toString(),
                 binding.description.text.toString(),
                 binding.ratingBar.rating.toInt()
-            ) { actualId ->
-                val arg = DonutEntryDialogArgs(actualId).toBundle()
-                val pendingIntent = navController
-                    .createDeepLink()
-                    .setDestination(R.id.entry_dialog)
-                    .setArguments(arg)
-                    .createPendingIntent()
-
-                Notifier.postNotification(actualId, context, pendingIntent)
-            }
+            )
             dismiss()
         }
 
@@ -98,12 +88,7 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         binding.cancelButton.setOnClickListener {
             dismiss()
         }
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return DonutEntryDialogBinding.inflate(inflater, container, false).root
+
+        return binding.root
     }
 }

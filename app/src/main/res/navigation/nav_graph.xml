@@ -31,7 +31,6 @@
         android:id="@+id/entry_dialog"
         android:name="com.android.samples.donuttracker.ui.entry.DonutEntryDialog"
         android:label="EntryDialog">
-        <deepLink app:uri="myapp://navdonutcreator.com/donutcreator" />
         <argument
             android:name="itemId"
             android:defaultValue="-1L"

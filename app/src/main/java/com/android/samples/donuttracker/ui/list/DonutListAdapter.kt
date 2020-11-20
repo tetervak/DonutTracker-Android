@@ -21,9 +21,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.samples.donuttracker.R
-import com.android.samples.donuttracker.databinding.DonutItemBinding
+import com.android.samples.donuttracker.databinding.DonutListItemBinding
 import com.android.samples.donuttracker.domain.Donut
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * The adapter used by the RecyclerView to display the current list of donuts
@@ -33,41 +32,27 @@ class DonutListAdapter(
     private var onDelete: (Donut) -> Unit) :
     ListAdapter<Donut, DonutListAdapter.ViewHolder>(DonutDiffCallback()) {
 
-    class ViewHolder(
-        private val binding: DonutItemBinding,
-        private var onEdit: (Donut) -> Unit,
-        private var onDelete: (Donut) -> Unit
+    inner class ViewHolder(
+        private val binding: DonutListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        private var donutId: Long = -1
-        private var nameView = binding.name
-        private var description = binding.description
-        private var thumbnail = binding.thumbnail
-        private var rating = binding.rating
-        private var donut: Donut? = null
 
         fun bind(donut: Donut) {
-            donutId = donut.id
-            nameView.text = donut.name
-            description.text = donut.description
-            rating.text = donut.rating.toString()
-            thumbnail.setImageResource(R.drawable.donut_with_sprinkles)
-            this.donut = donut
+            binding.donut = donut
+            binding.thumbnail.setImageResource(R.drawable.donut_with_sprinkles)
             binding.deleteButton.setOnClickListener {
                 onDelete(donut)
             }
             binding.root.setOnClickListener {
                 onEdit(donut)
             }
+            binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return ViewHolder(
-            DonutItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onEdit,
-            onDelete
-        )
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = DonutListItemBinding.inflate(layoutInflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -83,6 +68,4 @@ class DonutListAdapter(
             return oldItem == newItem
         }
     }
-
-
 }

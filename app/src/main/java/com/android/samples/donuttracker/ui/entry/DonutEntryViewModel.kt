@@ -43,21 +43,17 @@ class DonutEntryViewModel @ViewModelInject constructor(
         id: Long,
         name: String,
         description: String,
-        rating: Int,
-        setupNotification: (Long) -> Unit
+        rating: Int
     ) {
         val donut = Donut(id, name, description, rating)
 
         CoroutineScope(Dispatchers.Main.immediate).launch {
-            var actualId = id
 
             if (id > 0) {
                 update(donut)
             } else {
-                actualId = insert(donut)
+                insert(donut)
             }
-
-            setupNotification(actualId)
         }
     }
 

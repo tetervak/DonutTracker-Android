@@ -19,13 +19,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.android.samples.donuttracker.databinding.DonutListBinding
+import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
+import com.android.samples.donuttracker.domain.Donut
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -43,17 +43,17 @@ class DonutListFragment : Fragment() {
             )
         },
         onDelete = { donut ->
-            NotificationManagerCompat.from(requireContext()).cancel(donut.id.toInt())
             listViewModel.delete(donut)
         }
     )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding = DonutListBinding.bind(view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        listViewModel.donuts.observe(viewLifecycleOwner) { donuts ->
-            adapter.submitList(donuts)
-        }
+        val binding = DonutListFragmentBinding.inflate(inflater, container, false)
 
         binding.recyclerView.adapter = adapter
 
@@ -62,13 +62,11 @@ class DonutListFragment : Fragment() {
                 DonutListFragmentDirections.actionListToEntry()
             )
         }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return DonutListBinding.inflate(inflater, container, false).root
+        listViewModel.donuts.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        return binding.root
     }
 }

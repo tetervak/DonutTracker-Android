@@ -16,11 +16,9 @@
 package com.android.samples.donuttracker
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.android.samples.donuttracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -32,12 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-
-        Notifier.init(this)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
