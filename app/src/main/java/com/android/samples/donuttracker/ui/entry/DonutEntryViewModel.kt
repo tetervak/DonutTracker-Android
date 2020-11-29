@@ -22,7 +22,6 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -47,8 +46,7 @@ class DonutEntryViewModel @ViewModelInject constructor(
     ) {
         val donut = Donut(id, name, description, rating)
 
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-
+        viewModelScope.launch(Dispatchers.IO){
             if (id > 0) {
                 update(donut)
             } else {
