@@ -33,7 +33,7 @@ interface DonutDao {
     fun getAll(): LiveData<List<DonutEntity>>
 
     @Query("SELECT * FROM donuts WHERE id = :id")
-    suspend fun get(id: Long): DonutEntity
+    fun get(id: Long): LiveData<DonutEntity>
 
     @Insert
     suspend fun insert(donut: DonutEntity): Long

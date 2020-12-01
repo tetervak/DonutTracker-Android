@@ -16,30 +16,33 @@
 package com.android.samples.donuttracker.ui.entry
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DonutEntryViewModel @ViewModelInject constructor(
-    private val repository: DonutRepository) : ViewModel() {
+        private val repository: DonutRepository
+) : ViewModel() {
 
-    private var donutLiveData: LiveData<Donut>? = null
+    private val donutId = MutableLiveData<String?>()
 
-    fun get(id: Long): LiveData<Donut> {
-        return donutLiveData ?: liveData {
-            emit(repository.get(id))
-        }.also {
-            donutLiveData = it
-        }
+    fun loadData(id: String?){
+        donutId.value = id
     }
 
-    fun addData(
-        id: Long,
+    val donut: LiveData<Donut> =
+            donutId.switchMap {
+                if (it === null) {
+                    MutableLiveData(Donut(null, "", "", 3))
+                } else {
+                    repository.get(it)
+                }
+            }
+
+    fun saveData(
+        id: String?,
         name: String,
         description: String,
         rating: Int
@@ -47,10 +50,10 @@ class DonutEntryViewModel @ViewModelInject constructor(
         val donut = Donut(id, name, description, rating)
 
         viewModelScope.launch(Dispatchers.IO){
-            if (id > 0) {
-                update(donut)
-            } else {
+            if( id == null){
                 insert(donut)
+            }else{
+                update(donut)
             }
         }
     }

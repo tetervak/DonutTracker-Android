@@ -1,7 +1,7 @@
 package com.android.samples.donuttracker.domain
 
 data class Donut(
-    val id: Long,
+    val id: String?,
     val name: String,
     val description: String,
     val rating: Int,

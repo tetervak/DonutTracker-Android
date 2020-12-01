@@ -24,7 +24,6 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
-import com.android.samples.donuttracker.domain.Donut
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,36 +34,22 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DonutEntryDialog : BottomSheetDialogFragment() {
 
-    private val entryViewModel: DonutEntryViewModel by viewModels()
-
-    private enum class EditingState {
-        NEW_DONUT,
-        EXISTING_DONUT
-    }
+    private val safeArgs: DonutEntryDialogArgs by navArgs()
+    private val viewModel: DonutEntryViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         val binding = DonutEntryDialogBinding.inflate(inflater, container, false)
 
-        var donut: Donut? = null
-        val args: DonutEntryDialogArgs by navArgs()
-        val editingState =
-            if (args.itemId > 0) EditingState.EXISTING_DONUT
-            else EditingState.NEW_DONUT
-
-        // If we arrived here with an itemId of >= 0, then we are editing an existing item
-        if (editingState == EditingState.EXISTING_DONUT) {
-            // Request to edit an existing item, whose id was passed in as an argument.
-            // Retrieve that item and populate the UI with its details
-            entryViewModel.get(args.itemId).observe(viewLifecycleOwner) { donutItem ->
-                binding.name.setText(donutItem.name)
-                binding.description.setText(donutItem.description)
-                binding.ratingBar.rating = donutItem.rating.toFloat()
-                donut = donutItem
-            }
+        viewModel.loadData(safeArgs.donutId)
+        viewModel.donut.observe(viewLifecycleOwner) {
+            binding.name.setText(it.name)
+            binding.description.setText(it.description)
+            binding.ratingBar.rating = it.rating.toFloat()
         }
 
         // When the user clicks the Done button, use the data here to either update
@@ -75,8 +60,8 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
             val context = requireContext().applicationContext
             val navController = findNavController()
 
-            entryViewModel.addData(
-                donut?.id ?: 0,
+            viewModel.saveData(
+                safeArgs.donutId,
                 binding.name.text.toString(),
                 binding.description.text.toString(),
                 binding.ratingBar.rating.toInt()

@@ -25,7 +25,6 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
-import com.android.samples.donuttracker.domain.Donut
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -51,7 +50,7 @@ class DonutListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding = DonutListFragmentBinding.inflate(inflater, container, false)
 
@@ -59,11 +58,11 @@ class DonutListFragment : Fragment() {
 
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(
-                DonutListFragmentDirections.actionListToEntry()
+                DonutListFragmentDirections.actionListToEntry(null)
             )
         }
 
-        listViewModel.donuts.observe(viewLifecycleOwner) {
+        listViewModel.donuts.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
 
