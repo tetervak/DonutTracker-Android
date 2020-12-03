@@ -28,31 +28,33 @@ class DonutEntryViewModel @ViewModelInject constructor(
 
     private val donutId = MutableLiveData<String?>()
 
-    fun loadData(id: String?){
+    fun loadData(id: String?) {
         donutId.value = id
     }
 
     val donut: LiveData<Donut> =
             donutId.switchMap {
-                if (it === null) {
-                    MutableLiveData(Donut(null, "", "", 3))
-                } else {
-                    repository.get(it)
+                liveData {
+                    if (it == null) {
+                        emit(Donut(null, "", "", 3))
+                    } else {
+                        emit(repository.get(it))
+                    }
                 }
             }
 
     fun saveData(
-        id: String?,
-        name: String,
-        description: String,
-        rating: Int
+            id: String?,
+            name: String,
+            description: String,
+            rating: Int
     ) {
         val donut = Donut(id, name, description, rating)
 
-        viewModelScope.launch(Dispatchers.IO){
-            if( id == null){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (id == null) {
                 insert(donut)
-            }else{
+            } else {
                 update(donut)
             }
         }

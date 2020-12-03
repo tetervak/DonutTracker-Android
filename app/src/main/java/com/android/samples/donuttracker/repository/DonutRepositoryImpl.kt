@@ -14,8 +14,8 @@ class DonutRepositoryImpl @Inject constructor(private val donutDao: DonutDao)
         return Transformations.map(donutDao.getAll()) { list -> list.map { it.asDonut() }}
     }
 
-    override fun get(id: String): LiveData<Donut> {
-        return Transformations.map(donutDao.get(id.toLong())) { it.asDonut() }
+    override suspend fun get(id: String): Donut {
+        return donutDao.get(id.toLong()).asDonut()
     }
 
     override suspend fun insert(donut: Donut): Long {

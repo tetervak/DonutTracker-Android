@@ -16,11 +16,13 @@
 package com.android.samples.donuttracker.ui.entry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
@@ -34,6 +36,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DonutEntryDialog : BottomSheetDialogFragment() {
 
+    companion object {
+        private const val TAG = "DonutEntryDialog"
+    }
+
     private val safeArgs: DonutEntryDialogArgs by navArgs()
     private val viewModel: DonutEntryViewModel by viewModels()
 
@@ -45,7 +51,9 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
 
         val binding = DonutEntryDialogBinding.inflate(inflater, container, false)
 
+        Log.d(TAG, "onCreateView: donutId = " + safeArgs.donutId)
         viewModel.loadData(safeArgs.donutId)
+
         viewModel.donut.observe(viewLifecycleOwner) {
             binding.name.setText(it.name)
             binding.description.setText(it.description)
