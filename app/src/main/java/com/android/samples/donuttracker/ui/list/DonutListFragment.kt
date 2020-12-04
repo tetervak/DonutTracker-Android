@@ -24,7 +24,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.android.samples.donuttracker.R
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
+import com.android.samples.donuttracker.domain.Donut
+import com.android.samples.donuttracker.ui.entry.DonutEntryDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -33,16 +36,20 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DonutListFragment : Fragment() {
 
-    private val listViewModel: DonutListViewModel by viewModels()
+    companion object{
+        private const val DONUT_ENTRY_REQUEST: Int = 1
+    }
+
+    private val viewModel: DonutListViewModel by viewModels()
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
             findNavController().navigate(
-                DonutListFragmentDirections.actionListToEntry(donut.id)
+                DonutListFragmentDirections.actionListToEntry(DONUT_ENTRY_REQUEST, donut)
             )
         },
         onDelete = { donut ->
-            listViewModel.delete(donut)
+            viewModel.delete(donut)
         }
     )
 
@@ -56,14 +63,20 @@ class DonutListFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
 
+        viewModel.donuts.observe(viewLifecycleOwner){
+            adapter.submitList(it)
+        }
+
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(
-                DonutListFragmentDirections.actionListToEntry(null)
+                DonutListFragmentDirections.actionListToEntry(DONUT_ENTRY_REQUEST, Donut(null))
             )
         }
 
-        listViewModel.donuts.observe(viewLifecycleOwner){
-            adapter.submitList(it)
+        DonutEntryDialog.setResultListener(this, R.id.list_fragment){ result ->
+            if(result?.requestCode == DONUT_ENTRY_REQUEST){
+                viewModel.saveDonut(result.donut)
+            }
         }
 
         return binding.root
