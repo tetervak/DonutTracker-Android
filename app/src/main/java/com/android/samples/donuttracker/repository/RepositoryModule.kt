@@ -9,5 +9,5 @@ import dagger.hilt.android.components.ApplicationComponent
 @InstallIn(ApplicationComponent::class)
 abstract class RepositoryModule {
     @Binds
-    abstract fun bindEnvelopeRepository(repository: DonutRepositoryImpl): DonutRepository
+    abstract fun bindDonutRepository(repository: DonutRepositoryFirestore): DonutRepository
 }
