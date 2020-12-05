@@ -15,14 +15,12 @@
  */
 package com.android.samples.donuttracker.ui.list
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
-import com.android.samples.donuttracker.ui.entry.DonutEntryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,15 +38,9 @@ class DonutListViewModel @ViewModelInject constructor(
         repository.delete(donut)
     }
 
-    fun saveData(
-        id: String?,
-        name: String,
-        description: String,
-        rating: Int
-    ) {
-        val donut = Donut(id, name, description, rating)
+    fun saveDonut(donut: Donut) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (id == null) {
+            if (donut.id == null) {
                 repository.insert(donut)
             } else {
                 repository.update(donut)
