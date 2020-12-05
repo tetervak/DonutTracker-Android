@@ -21,20 +21,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
 import com.android.samples.donuttracker.domain.Donut
-import com.android.samples.donuttracker.ui.list.DonutListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
-import java.util.*
 
 /**
  * This dialog allows the user to enter information about a donut, either creating a new
@@ -47,7 +43,6 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         val requestCode: Int,
         val donut: Donut
     ) : Serializable
-
 
     companion object {
 
