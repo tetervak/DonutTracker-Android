@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.firestore.FirestoreCollectionLiveData
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.util.*
+import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 
 class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
@@ -55,6 +58,7 @@ class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
             ?.asDonut()
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun insert(donut: Donut): String {
         Log.d(TAG, "insert(donut = $donut)")
 
@@ -62,20 +66,26 @@ class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
         val userId = getUserId()
         val userRef = firestore.collection("users").document(userId)
         try {
-            val snapshot: DocumentSnapshot = userRef.get().await()
+            val snapshot = Tasks.await(userRef.get())
             if (snapshot.exists()) {
-                user = snapshot.toObject(UserFirestore::class.java)
+                Log.d(TAG, "insert: the document exists.")
+                user = snapshot.toObject<UserFirestore>()
             }
-        } catch (e: Throwable) {
-            Log.d(TAG, "insert: error: ${e.message}")
+        }catch (e: ExecutionException) {
+            // The Task failed, this is the same exception you'd get in a non-blocking
+            // failure handler.
+            Log.d(TAG, "insert: ExecutionException $e")
+        } catch (e: InterruptedException) {
+            // An interrupt occurred while waiting for the task to complete.
+            Log.d(TAG, "insert: InterruptedException $e")
         }
 
         if (user == null) {
-            Log.d(TAG, "insert: user = the user is not found")
+            Log.d(TAG, "insert: the user is not found")
             user = UserFirestore(getUserId(), getUserName(), 0)
         }
         Log.d(TAG, "insert: user.name = ${user.name}")
-        user.count += 1
+        user.count++
 
         val donutRef = userRef.collection("donuts").document()
 
