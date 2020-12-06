@@ -63,14 +63,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="4" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/deleteButton"
-            android:contentDescription="@string/delete"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/delete_donut"
+            android:padding="4dp"
+            android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_clear_24px" />
+            app:srcCompat="@drawable/ic_baseline_clear_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
