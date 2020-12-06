@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/list_fragment"
         android:name="com.android.samples.donuttracker.ui.list.DonutListFragment"
-        android:label="ListFragment"
+        android:label="Donut List"
         tools:layout="@layout/donut_list_fragment">
         <action
             android:id="@+id/action_list_to_entry"
@@ -31,7 +31,7 @@
     <dialog
         android:id="@+id/entry_dialog"
         android:name="com.android.samples.donuttracker.ui.entry.DonutEntryDialog"
-        android:label="EntryDialog"
+        android:label="Donut"
         tools:layout="@layout/donut_entry_dialog">
         <argument
             android:name="donutId"
