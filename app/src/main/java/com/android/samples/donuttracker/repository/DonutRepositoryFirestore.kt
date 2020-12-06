@@ -131,7 +131,7 @@ class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
         @DocumentId val id: String? = null,
         val name: String? = null,
         val description: String? = null,
-        val rating: Int = 1,
+        val rating: Float = 3F,
         val lowFat: Boolean = false,
         @ServerTimestamp var date: Date? = null
     ){

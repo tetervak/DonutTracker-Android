@@ -15,15 +15,6 @@ class MainViewModel @ViewModelInject constructor(
         repository.delete(donut)
     }
 
-    fun saveData(
-        id: String?,
-        name: String,
-        description: String,
-        rating: Float
-    ) {
-        save(Donut(id, name, description, rating))
-    }
-
     fun save(donut: Donut){
         viewModelScope.launch(Dispatchers.IO) {
             if (donut.id == null) {

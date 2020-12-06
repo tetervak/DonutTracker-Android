@@ -35,10 +35,8 @@
         android:label="Donut"
         tools:layout="@layout/donut_entry_dialog">
         <argument
-            android:name="requestCode"
-            app:argType="integer" />
-        <argument
-            android:name="donut"
-            app:argType="com.android.samples.donuttracker.domain.Donut" />
+            android:name="donutId"
+            app:argType="string"
+            app:nullable="true" />
     </dialog>
 </navigation>

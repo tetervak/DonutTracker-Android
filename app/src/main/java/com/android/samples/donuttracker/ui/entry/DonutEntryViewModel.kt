@@ -19,9 +19,14 @@ class DonutEntryViewModel @ViewModelInject constructor(
             donutId.switchMap { id ->
                 liveData {
                     if (id == null) {
-                        emit(Donut(null, "", "", 3.0F))
+                        emit(Donut(null, "", "", 3F))
                     } else {
-                        emit(repository.get(id))
+                        val donut = repository.get(id)
+                        if(donut != null){
+                            emit(donut)
+                        }else{
+                            emit(Donut(null, "", "", 3F))
+                        }
                     }
                 }
             }

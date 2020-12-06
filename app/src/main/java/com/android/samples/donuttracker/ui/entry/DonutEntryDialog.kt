@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 package com.android.samples.donuttracker.ui.list
-
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.switchMap
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * This ViewModel is used to access the underlying data and to observe changes to it.
