@@ -5,12 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.firestore.FirestoreCollectionLiveData
+import com.android.samples.donuttracker.firestore.FirestoreRepository
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -21,6 +25,8 @@ class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
     companion object {
         private const val TAG = "DonutRepositoryFirestore"
     }
+
+    private val firestoreRepository = FirestoreRepository(DonutFirestore::class.java)
 
     private val firestore = Firebase.firestore
 
@@ -39,14 +45,21 @@ class DonutRepositoryFirestore @Inject constructor() : DonutRepository {
             .collection("donuts")
     }
 
-    override fun getAll(): LiveData<List<Donut>> {
-        Log.d(TAG, "getAll: called")
-        return Transformations.map(
-            FirestoreCollectionLiveData(
-                donutCollection().orderBy("date", Query.Direction.DESCENDING),
-                DonutFirestore::class.java
-            )
-        ) { list -> list.map { it.asDonut() } }
+//    override fun getAll(): LiveData<List<Donut>> {
+//        Log.d(TAG, "getAll: called")
+//        return Transformations.map(
+//            FirestoreCollectionLiveData(
+//                donutCollection().orderBy("date", Query.Direction.DESCENDING),
+//                DonutFirestore::class.java
+//            )
+//        ) { list -> list.map { it.asDonut() } }
+//    }
+
+    @ExperimentalCoroutinesApi
+    override fun getAllFlow(): Flow<List<Donut>> {
+        return firestoreRepository.getAllFromQuery(
+            donutCollection().orderBy("date", Query.Direction.DESCENDING)
+        ).map { list -> list.map { it.asDonut() } }
     }
 
     override suspend fun get(id: String): Donut? {

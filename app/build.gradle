@@ -85,5 +85,9 @@ dependencies {
 
     /* coroutines support for firebase operations */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
+    // had to include these two in order to use Flow
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
 }
 

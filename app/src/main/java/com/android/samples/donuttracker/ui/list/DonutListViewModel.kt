@@ -15,10 +15,7 @@
  */
 package com.android.samples.donuttracker.ui.list
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
 
@@ -41,7 +38,8 @@ class DonutListViewModel @ViewModelInject constructor(
     val donuts: LiveData<List<Donut>> =
         userId.switchMap { id ->
             if (id != null) {
-                repository.getAll()
+//                repository.getAll()
+                repository.getAllFlow().asLiveData()
             } else {
                 MutableLiveData()
             }
