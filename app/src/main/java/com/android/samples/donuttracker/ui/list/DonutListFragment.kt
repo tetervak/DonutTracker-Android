@@ -25,7 +25,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.android.samples.donuttracker.R
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.firestore.FirestoreViewModel
@@ -38,21 +39,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DonutListFragment : Fragment() {
 
-    companion object{
-        private const val DONUT_ENTRY_REQUEST: Int = 1
-    }
-
     private val firestoreViewModel: FirestoreViewModel by activityViewModels()
     private val listViewModel: DonutListViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
             findNavController().navigate(
-                DonutListFragmentDirections.actionListToEntry(DONUT_ENTRY_REQUEST, donut)
+                DonutListFragmentDirections.actionListToEntry(donut.id)
             )
         },
         onDelete = { donut ->
-            listViewModel.delete(donut)
+            mainViewModel.delete(donut)
         }
     )
 
@@ -64,6 +62,8 @@ class DonutListFragment : Fragment() {
 
         val binding = DonutListFragmentBinding.inflate(inflater, container, false)
 
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        binding.recyclerView.addItemDecoration(divider)
         binding.recyclerView.adapter = adapter
 
         firestoreViewModel.userId.observe(viewLifecycleOwner){ id ->
@@ -74,20 +74,14 @@ class DonutListFragment : Fragment() {
             }
         }
 
-        listViewModel.donuts.observe(viewLifecycleOwner){
-            adapter.submitList(it)
-        }
-
         binding.fab.setOnClickListener { fabView ->
             fabView.findNavController().navigate(
-                DonutListFragmentDirections.actionListToEntry(DONUT_ENTRY_REQUEST, Donut(null))
+                DonutListFragmentDirections.actionListToEntry(null)
             )
         }
 
-        DonutEntryDialog.setResultListener(this, R.id.list_fragment){ result ->
-            if(result?.requestCode == DONUT_ENTRY_REQUEST){
-                listViewModel.saveDonut(result.donut)
-            }
+        listViewModel.donuts.observe(viewLifecycleOwner){
+            adapter.submitList(it)
         }
 
         return binding.root

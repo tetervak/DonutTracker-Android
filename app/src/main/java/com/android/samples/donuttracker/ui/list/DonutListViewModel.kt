@@ -16,7 +16,9 @@
 package com.android.samples.donuttracker.ui.list
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +28,7 @@ import kotlinx.coroutines.launch
  * This ViewModel is used to access the underlying data and to observe changes to it.
  */
 class DonutListViewModel @ViewModelInject constructor(
-    private val repository: DonutRepository
+    repository: DonutRepository
 ) : ViewModel() {
 
     private val userId = MutableLiveData<String?>()
@@ -46,18 +48,4 @@ class DonutListViewModel @ViewModelInject constructor(
                 MutableLiveData()
             }
         }
-
-    fun delete(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(donut)
-    }
-
-    fun saveDonut(donut: Donut) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (donut.id == null) {
-                repository.insert(donut)
-            } else {
-                repository.update(donut)
-            }
-        }
-    }
 }
