@@ -35,7 +35,7 @@ data class DonutEntity(
     val description: String = "",
 
     @ColumnInfo(name = "rating")
-    val rating: Int,
+    val rating: Float,
 
     @ColumnInfo(name = "low_fat")
     val lowFat: Boolean = false

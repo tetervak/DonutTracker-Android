@@ -28,13 +28,10 @@ import kotlinx.coroutines.launch
  * This ViewModel is used to access the underlying data and to observe changes to it.
  */
 class DonutListViewModel @ViewModelInject constructor(
-    private val repository: DonutRepository) : ViewModel() {
+    repository: DonutRepository
+) : ViewModel() {
 
     // Users of this ViewModel will observe changes to its donuts list to know when
     // to redisplay those changes
     val donuts: LiveData<List<Donut>> = repository.getAll()
-
-    fun delete(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(donut)
-    }
 }

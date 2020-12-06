@@ -19,8 +19,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.repository.DonutRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DonutEntryViewModel @ViewModelInject constructor(
         private val repository: DonutRepository
@@ -42,29 +40,4 @@ class DonutEntryViewModel @ViewModelInject constructor(
                     }
                 }
             }
-
-    fun saveData(
-            id: String?,
-            name: String,
-            description: String,
-            rating: Int
-    ) {
-        val donut = Donut(id, name, description, rating)
-
-        viewModelScope.launch(Dispatchers.IO) {
-            if (id == null) {
-                insert(donut)
-            } else {
-                update(donut)
-            }
-        }
-    }
-
-    private suspend fun insert(donut: Donut): Long {
-        return repository.insert(donut)
-    }
-
-    private fun update(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(donut)
-    }
 }

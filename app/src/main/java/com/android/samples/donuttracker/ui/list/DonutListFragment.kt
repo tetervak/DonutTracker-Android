@@ -20,10 +20,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,6 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DonutListFragment : Fragment() {
 
     private val listViewModel: DonutListViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
@@ -42,7 +45,7 @@ class DonutListFragment : Fragment() {
             )
         },
         onDelete = { donut ->
-            listViewModel.delete(donut)
+            mainViewModel.delete(donut)
         }
     )
 

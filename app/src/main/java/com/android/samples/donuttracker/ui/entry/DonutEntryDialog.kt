@@ -20,11 +20,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.DialogFragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +42,8 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
     }
 
     private val safeArgs: DonutEntryDialogArgs by navArgs()
-    private val viewModel: DonutEntryViewModel by viewModels()
+    private val entryViewModel: DonutEntryViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,27 +54,22 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         val binding = DonutEntryDialogBinding.inflate(inflater, container, false)
 
         Log.d(TAG, "onCreateView: donutId = " + safeArgs.donutId)
-        viewModel.loadData(safeArgs.donutId)
+        entryViewModel.loadData(safeArgs.donutId)
 
-        viewModel.donut.observe(viewLifecycleOwner) {
-            binding.name.setText(it.name)
-            binding.description.setText(it.description)
-            binding.ratingBar.rating = it.rating.toFloat()
+        entryViewModel.donut.observe(viewLifecycleOwner) { donut ->
+            binding.name.setText(donut.name)
+            binding.description.setText(donut.description)
+            binding.ratingBar.rating = donut.rating
         }
 
         // When the user clicks the Done button, use the data here to either update
         // an existing item or create a new one
         binding.doneButton.setOnClickListener {
-            // Grab these now since the Fragment may go away before the setupNotification
-            // lambda below is called
-            val context = requireContext().applicationContext
-            val navController = findNavController()
-
-            viewModel.saveData(
+            mainViewModel.saveData(
                 safeArgs.donutId,
                 binding.name.text.toString(),
                 binding.description.text.toString(),
-                binding.ratingBar.rating.toInt()
+                binding.ratingBar.rating
             )
             dismiss()
         }

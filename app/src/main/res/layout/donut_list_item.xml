@@ -32,11 +32,12 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="8dp"
+            android:contentDescription="@string/donutPicture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/presence_online"
-            android:contentDescription="@string/donutPicture" />
+            tools:srcCompat="@drawable/donut_with_sprinkles" />
 
         <TextView
             android:id="@+id/name"
@@ -70,12 +71,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@{String.valueOf(donut.rating)}"
-            tools:text="@string/rating"
             android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="4" />
 
         <ImageView
             android:id="@+id/deleteButton"
