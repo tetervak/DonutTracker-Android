@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +58,8 @@ class DonutListFragment : Fragment() {
 
         val binding = DonutListFragmentBinding.inflate(inflater, container, false)
 
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        binding.recyclerView.addItemDecoration(divider)
         binding.recyclerView.adapter = adapter
 
         binding.fab.setOnClickListener { fabView ->
