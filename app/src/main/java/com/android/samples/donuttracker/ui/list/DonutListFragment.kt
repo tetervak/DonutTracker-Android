@@ -28,9 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
-import com.android.samples.donuttracker.domain.Donut
 import com.android.samples.donuttracker.firestore.FirestoreViewModel
-import com.android.samples.donuttracker.ui.entry.DonutEntryDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
