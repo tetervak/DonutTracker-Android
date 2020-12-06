@@ -27,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.android.samples.donuttracker.MainViewModel
 import com.android.samples.donuttracker.databinding.DonutEntryDialogBinding
+import com.android.samples.donuttracker.domain.Donut
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,19 +58,17 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         entryViewModel.loadData(safeArgs.donutId)
 
         entryViewModel.donut.observe(viewLifecycleOwner) { donut ->
-            binding.name.setText(donut.name)
-            binding.description.setText(donut.description)
-            binding.ratingBar.rating = donut.rating
+            binding.donut = donut
         }
 
-        // When the user clicks the Done button, use the data here to either update
-        // an existing item or create a new one
-        binding.doneButton.setOnClickListener {
-            mainViewModel.saveData(
-                safeArgs.donutId,
-                binding.name.text.toString(),
-                binding.description.text.toString(),
-                binding.ratingBar.rating
+        binding.saveButton.setOnClickListener {
+            mainViewModel.save(
+                Donut(
+                    id = safeArgs.donutId,
+                    name = binding.name.text.toString(),
+                    description =  binding.description.text.toString(),
+                    rating = binding.ratingBar.rating
+                )
             )
             dismiss()
         }

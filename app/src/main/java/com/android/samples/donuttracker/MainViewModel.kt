@@ -21,9 +21,12 @@ class MainViewModel @ViewModelInject constructor(
         description: String,
         rating: Float
     ) {
-        val donut = Donut(id, name, description, rating)
+        save(Donut(id, name, description, rating))
+    }
+
+    fun save(donut: Donut){
         viewModelScope.launch(Dispatchers.IO) {
-            if (id == null) {
+            if (donut.id == null) {
                 repository.insert(donut)
             } else {
                 repository.update(donut)
