@@ -11,11 +11,12 @@ import kotlinx.coroutines.launch
 class MainViewModel @ViewModelInject constructor(
     private val repository: DonutRepository): ViewModel() {
 
-    fun delete(donut: Donut) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(donut)
-    }
+    fun delete(donut: Donut) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.delete(donut)
+        }
 
-    fun save(donut: Donut){
+    fun save(donut: Donut) =
         viewModelScope.launch(Dispatchers.IO) {
             if (donut.id == null) {
                 repository.insert(donut)
@@ -23,5 +24,4 @@ class MainViewModel @ViewModelInject constructor(
                 repository.update(donut)
             }
         }
-    }
 }
