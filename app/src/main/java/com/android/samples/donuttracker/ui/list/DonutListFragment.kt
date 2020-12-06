@@ -20,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
@@ -27,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.android.samples.donuttracker.R
 import com.android.samples.donuttracker.databinding.DonutListFragmentBinding
 import com.android.samples.donuttracker.domain.Donut
+import com.android.samples.donuttracker.firestore.FirestoreViewModel
 import com.android.samples.donuttracker.ui.entry.DonutEntryDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +42,8 @@ class DonutListFragment : Fragment() {
         private const val DONUT_ENTRY_REQUEST: Int = 1
     }
 
-    private val viewModel: DonutListViewModel by viewModels()
+    private val firestoreViewModel: FirestoreViewModel by activityViewModels()
+    private val listViewModel: DonutListViewModel by viewModels()
 
     private val adapter = DonutListAdapter(
         onEdit = { donut ->
@@ -49,7 +52,7 @@ class DonutListFragment : Fragment() {
             )
         },
         onDelete = { donut ->
-            viewModel.delete(donut)
+            listViewModel.delete(donut)
         }
     )
 
@@ -63,7 +66,15 @@ class DonutListFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
 
-        viewModel.donuts.observe(viewLifecycleOwner){
+        firestoreViewModel.userId.observe(viewLifecycleOwner){ id ->
+            if( id != null ) {
+                listViewModel.loadData(id)
+            } else {
+                listViewModel.clearData()
+            }
+        }
+
+        listViewModel.donuts.observe(viewLifecycleOwner){
             adapter.submitList(it)
         }
 
@@ -75,7 +86,7 @@ class DonutListFragment : Fragment() {
 
         DonutEntryDialog.setResultListener(this, R.id.list_fragment){ result ->
             if(result?.requestCode == DONUT_ENTRY_REQUEST){
-                viewModel.saveDonut(result.donut)
+                listViewModel.saveDonut(result.donut)
             }
         }
 

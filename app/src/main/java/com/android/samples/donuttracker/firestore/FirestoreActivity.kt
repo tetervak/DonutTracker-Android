@@ -26,8 +26,6 @@ abstract class FirestoreActivity : AppCompatActivity(),
 
     private val viewModel: FirestoreViewModel by viewModels()
 
-    abstract fun onSignedIn()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,7 +71,7 @@ abstract class FirestoreActivity : AppCompatActivity(),
             viewModel.isSigningIn = false
 
             if (resultCode == Activity.RESULT_OK){
-                onSignedIn()
+                viewModel.setUserId(Firebase.auth.currentUser?.uid!!)
             } else {
                 if (response == null) {
                     // User pressed the back button.
@@ -99,12 +97,17 @@ abstract class FirestoreActivity : AppCompatActivity(),
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_sign_out -> {
-                AuthUI.getInstance().signOut(this)
+                signOut()
                 startSignIn()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun signOut(){
+        AuthUI.getInstance().signOut(application)
+        viewModel.setUserId(null)
     }
 
     override fun onRetry() {

@@ -41,7 +41,8 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
 
     data class DonutEntryResult(
         val requestCode: Int,
-        val donut: Donut
+        val donut: Donut,
+        var processed: Boolean = false
     ) : Serializable
 
     companion object {
@@ -52,7 +53,7 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
         fun setResultListener(
             fragment: Fragment,
             fragmentId: Int,
-            onResult: (DonutEntryResult?) -> Unit
+            onResult: (DonutEntryResult) -> Unit
         ) {
             val navController = fragment.findNavController()
             val navBackStackEntry = navController.getBackStackEntry(fragmentId)
@@ -62,7 +63,12 @@ class DonutEntryDialog : BottomSheetDialogFragment() {
                     && handle.contains(DONUT_ENTRY_RESULT)
                 ) {
                     val result: DonutEntryResult? = handle.get(DONUT_ENTRY_RESULT);
-                    onResult(result)
+                    if(result != null) {
+                        if(!result.processed) {
+                            onResult(result)
+                            result.processed = true
+                        }
+                    }
                 }
             }
             navBackStackEntry.lifecycle.addObserver(observer)

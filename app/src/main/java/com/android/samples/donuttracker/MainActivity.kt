@@ -73,8 +73,4 @@ class MainActivity : FirestoreActivity() {
         }
     }
 
-    override fun onSignedIn() {
-        navController.navigate(R.id.action_global_list_fragment)
-    }
-
 }

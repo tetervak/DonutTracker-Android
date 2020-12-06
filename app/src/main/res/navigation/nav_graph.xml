@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/login_fragment">
+    app:startDestination="@id/list_fragment">
 
     <fragment
         android:id="@+id/list_fragment"
@@ -41,13 +41,4 @@
             android:name="donut"
             app:argType="com.android.samples.donuttracker.domain.Donut" />
     </dialog>
-    <fragment
-        android:id="@+id/login_fragment"
-        android:name="com.android.samples.donuttracker.ui.login.LoginFragment"
-        android:label="Login"
-        tools:layout="@layout/login_fragment" />
-    <action
-        android:id="@+id/action_global_list_fragment"
-        app:destination="@id/list_fragment"
-        app:popUpTo="@id/list_fragment" />
 </navigation>
